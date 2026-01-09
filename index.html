@@ -683,11 +683,9 @@
             position: relative;
         }
 
-        .transport-route-steps span::after {
-            content: '→';
-            margin-left: 8px;
-            color: #7f8c8d;
-            font-weight: normal;
+        /* 화살표 중복 제거: HTML에 이미 화살표가 있으므로 ::after 불필요 */
+        .transport-route-steps span {
+            /* ::after 제거됨 */
         }
 
         .transport-note {
