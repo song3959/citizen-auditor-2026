@@ -1542,7 +1542,7 @@
         
         // API 엔드포인트 URL (구글 Apps Script 웹앱 URL)
         // 기존 구글 폼 URL에 '?api=attendance' 파라미터 추가
-        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxmX55uwQ1OlXl1MUlB7XvCo5pfXARv_4mIhsDyxZFCHh5SoA_5jUnp1GiAzANrS3H9ow/exec?api=attendance';
+        const API_ENDPOINT = 'https://script.google.com/macros/s/AKfycbwDZ-7DMyeukhde4ShKjvNzF7GTxrPoXa77ocI7DRFSR8Mxo8kJJfbD4BEnMBg5qeuGHQ/exec?api=attendance';
         
         // 참석 여부 데이터 가져오기
         async function loadAttendanceData() {
@@ -1726,7 +1726,8 @@
             { name: '김의현', attendance: '참석', region: '2권역' },
             { name: '전병양', attendance: '참석', region: '3권역' },
             { name: '오문식', attendance: '참석', region: '3권역' },
-            { name: '전정환', attendance: '참석', region: '3권역' }
+            { name: '전정환', attendance: '참석', region: '3권역' },
+            { name: '김정은', attendance: '불참', region: '3권역' }
         ];
         
         // 초기 데이터 즉시 표시 함수
@@ -1772,13 +1773,13 @@
                 loadAttendanceData();
             }, 1000);
             
-            // 5분마다 자동 업데이트 비활성화 (깜박거림 방지)
-            // setInterval(() => {
-            //     console.log('⏰ 자동 업데이트 시간 (5분 경과)');
-            //     loadAttendanceData();
-            // }, 5 * 60 * 1000);
+            // 5분마다 자동 업데이트 활성화
+            setInterval(() => {
+                console.log('⏰ 자동 업데이트 시간 (5분 경과)');
+                loadAttendanceData();
+            }, 5 * 60 * 1000);
             
-            console.log('✅ 초기 데이터 로드 완료 (자동 업데이트 비활성화)');
+            console.log('✅ 초기 데이터 로드 완료 (자동 업데이트 활성화)');
         });
         
         // 수동 새로고침 기능 (F5 또는 Ctrl+R)
