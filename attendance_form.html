@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>참석 여부 응답 - 2026년 제1회 비상근 시민감사관 운영협의회</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: #f4f6f9;
+            overflow-x: hidden;
+        }
+        
+        /* 배경 오버레이 */
+        .background-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f4f6f9;
+            z-index: -1;
+        }
+        
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, #004a98 0%, #0066cc 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 74, 152, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* 메인 컨테이너 */
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px 40px;
+        }
+        
+        /* 폼 카드 */
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+        
+        /* 행사 정보 카드 */
+        .event-info {
+            background: linear-gradient(135deg, #fff5e6 0%, #fff9f0 100%);
+            border-left: 5px solid #ffa726;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+        }
+        
+        .event-info h3 {
+            color: #e65100;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .event-info h3::before {
+            content: '📅';
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .event-detail {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            color: #5d4037;
+            font-size: 1.05em;
+        }
+        
+        .event-detail strong {
+            color: #bf360c;
+            min-width: 70px;
+            font-weight: 600;
+        }
+        
+        /* 폼 그룹 */
+        .form-group {
+            margin-bottom: 30px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #004a98;
+            margin-bottom: 12px;
+        }
+        
+        .required {
+            color: #e74c3c;
+            margin-left: 5px;
+        }
+        
+        /* 입력 필드 */
+        .form-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1em;
+            border: 2px solid #e0e7ff;
+            border-radius: 12px;
+            background: #fafbff;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #0066cc;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.1);
+        }
+        
+        /* 라디오 버튼 그룹 */
+        .radio-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .radio-option {
+            position: relative;
+        }
+        
+        .radio-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .radio-label {
+            display: block;
+            padding: 18px 20px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 1.05em;
+        }
+        
+        .radio-option input[type="radio"]:checked + .radio-label {
+            background: linear-gradient(135deg, #004a98 0%, #0066cc 100%);
+            color: white;
+            border-color: #004a98;
+            box-shadow: 0 4px 15px rgba(0, 74, 152, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .radio-label:hover {
+            border-color: #0066cc;
+            background: #e3f2fd;
+        }
+        
+        .radio-option input[type="radio"]:checked + .radio-label:hover {
+            background: linear-gradient(135deg, #003d7a 0%, #0052a3 100%);
+        }
+        
+        /* 제출 버튼 */
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, #004a98 0%, #0066cc 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 74, 152, 0.3);
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #003d7a 0%, #0052a3 100%);
+            box-shadow: 0 6px 20px rgba(0, 74, 152, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        /* 성공/오류 메시지 */
+        .message {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 로딩 스피너 */
+        .spinner {
+            display: none;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0066cc;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+        
+        .spinner.show {
+            display: block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 안내 텍스트 */
+        .info-text {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            color: #1565c0;
+            font-size: 0.95em;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .form-card {
+                padding: 25px;
+            }
+            
+            .radio-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-overlay"></div>
+    
+    <!-- 헤더 -->
+    <div class="header">
+        <h1>📋 참석 여부 응답</h1>
+        <p>2026년 제1회 비상근 시민감사관 운영협의회</p>
+    </div>
+    
+    <!-- 메인 컨테이너 -->
+    <div class="container">
+        <!-- 메시지 영역 -->
+        <div id="successMessage" class="message success">
+            ✅ 참석 여부가 성공적으로 제출되었습니다!
+        </div>
+        <div id="errorMessage" class="message error">
+            ⚠️ 제출 중 오류가 발생했습니다. 다시 시도해주세요.
+        </div>
+        
+        <!-- 폼 카드 -->
+        <div class="form-card">
+            <!-- 행사 정보 -->
+            <div class="event-info">
+                <h3>행사 정보</h3>
+                <div class="event-detail">
+                    <strong>일시</strong>
+                    <span>2026년 1월 27일(화) 14:00 ~ 1월 28일(수) 14:00</span>
+                </div>
+                <div class="event-detail">
+                    <strong>장소</strong>
+                    <span>블룸비스타 Hotel & Conference</span>
+                </div>
+            </div>
+            
+            <!-- 안내 텍스트 -->
+            <div class="info-text">
+                💡 회신 마감: 2026년 1월 20일(월) 18:00까지<br>
+                응답하신 내용은 실시간으로 웹사이트에 반영됩니다.
+            </div>
+            
+            <!-- 폼 -->
+            <form id="attendanceForm">
+                <!-- 성함 -->
+                <div class="form-group">
+                    <label class="form-label">
+                        성함<span class="required">*</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        class="form-input" 
+                        placeholder="이름을 입력하세요"
+                        required
+                    >
+                </div>
+                
+                <!-- 권역 -->
+                <div class="form-group">
+                    <label class="form-label">
+                        권역<span class="required">*</span>
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="region1" name="region" value="1권역" required>
+                            <label for="region1" class="radio-label">1권역</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="region2" name="region" value="2권역">
+                            <label for="region2" class="radio-label">2권역</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="region3" name="region" value="3권역">
+                            <label for="region3" class="radio-label">3권역</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="region4" name="region" value="4권역">
+                            <label for="region4" class="radio-label">4권역</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 참석 여부 -->
+                <div class="form-group">
+                    <label class="form-label">
+                        참석 여부<span class="required">*</span>
+                    </label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="attend" name="attendance" value="참석" required>
+                            <label for="attend" class="radio-label">✅ 참석</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="absent" name="attendance" value="불참">
+                            <label for="absent" class="radio-label">❌ 불참</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 제출 버튼 -->
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    제출하기
+                </button>
+                
+                <!-- 로딩 스피너 -->
+                <div class="spinner" id="spinner"></div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // 구글 Apps Script 웹 앱 URL (실제 URL로 교체 필요)
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxmX55uwQ1OlXl1MUlB7XvCo5pfXARv_4mIhsDyxZFCHh5SoA_5jUnp1GiAzANrS3H9ow/exec';
+        
+        const form = document.getElementById('attendanceForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('spinner');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // 폼 데이터 수집
+            const formData = new FormData(form);
+            const data = {
+                name: formData.get('name'),
+                region: formData.get('region'),
+                attendance: formData.get('attendance')
+            };
+            
+            // 제출 버튼 비활성화 및 로딩 표시
+            submitBtn.disabled = true;
+            submitBtn.textContent = '제출 중...';
+            spinner.classList.add('show');
+            
+            // 기존 메시지 숨기기
+            successMessage.classList.remove('show');
+            errorMessage.classList.remove('show');
+            
+            try {
+                // Google Apps Script로 데이터 전송
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // 성공 메시지 표시
+                successMessage.classList.add('show');
+                form.reset();
+                
+                // 3초 후 웹사이트로 리다이렉트 (선택사항)
+                setTimeout(() => {
+                    // window.location.href = 'https://song3959.github.io/citizen-auditor-2026/';
+                }, 3000);
+                
+            } catch (error) {
+                console.error('제출 오류:', error);
+                errorMessage.classList.add('show');
+            } finally {
+                // 버튼 복원
+                submitBtn.disabled = false;
+                submitBtn.textContent = '제출하기';
+                spinner.classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
